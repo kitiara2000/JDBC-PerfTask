@@ -1,11 +1,11 @@
 package com.example.statements;
 
-import com.example.entity.ProductionBrands;
+import com.example.model.ProductionBrands;
+import com.example.util.DatabaseConnection;
 
 import java.sql.*;
 
 public class Update {
-    private static String url = "jdbc:sqlserver://EN411445;user=user;password=Uu1234567890;databaseName=BikeStores";
     private static Connection connection;
     private static Statement statement;
     private static PreparedStatement preStatement;
@@ -13,7 +13,7 @@ public class Update {
     static {
         try {
             //get connection to DB
-            connection = DriverManager.getConnection(url);
+            connection = new DatabaseConnection().getConnection();
             //create a statement
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         } catch (SQLException throwables) {

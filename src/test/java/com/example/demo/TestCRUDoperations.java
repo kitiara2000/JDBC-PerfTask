@@ -1,9 +1,12 @@
 package com.example.demo;
 
-import com.example.entity.ProductionBrands;
-import com.example.entity.SalesCustomers;
+import com.example.model.ProductionBrands;
+import com.example.model.SalesCustomers;
 import com.example.statements.Insert;
 import com.example.statements.Select;
+import com.example.util.DatabaseConnection;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
@@ -13,6 +16,19 @@ import java.sql.SQLException;
 public class TestCRUDoperations {
     ResultSet result;
     ResultSetMetaData metadata;
+
+    static DatabaseConnection dbConnection = null;
+
+    @BeforeAll
+    static void setup() throws SQLException {
+        dbConnection = new DatabaseConnection();
+        dbConnection.getConnection();
+    }
+
+    @AfterAll
+    static public void tearDown() {
+        dbConnection.close();
+    }
 
     @Test
     public void testSelectAll() throws SQLException {
