@@ -22,18 +22,18 @@ public class Select {
         }
     }
 
-    public static ResultSet all(String tableName) {
-        ResultSet rs = null;
-        log.info("Execute query: SELECT * FROM " + tableName);
-        try {
-            rs = statement.executeQuery("SELECT * FROM " + tableName);
-            log.info("Query was executed successfully");
-        } catch (SQLException throwables) {
-            log.error("Query was not executed!");
-            throwables.printStackTrace();
-        }
-        return rs;
-    }
+//    public static ResultSet all(String tableName) {
+//        ResultSet rs = null;
+//        log.info("Execute query: SELECT * FROM " + tableName);
+//        try {
+//            rs = statement.executeQuery("SELECT * FROM " + tableName);
+//            log.info("Query was executed successfully");
+//        } catch (SQLException throwables) {
+//            log.error("Query was not executed!");
+//            throwables.printStackTrace();
+//        }
+//        return rs;
+//    }
 
     public static ResultSet topNRows(String tableName, int n) throws SQLException {
         ResultSet rs = null;

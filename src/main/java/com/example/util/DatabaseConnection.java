@@ -14,7 +14,7 @@ public class DatabaseConnection {
 
     private static Connection connection = null;
 
-    public Connection getConnection() throws SQLException {
+    public static Connection getConnection() {
 
         try {
             Properties properties = new Properties();
@@ -23,24 +23,22 @@ public class DatabaseConnection {
             String user = properties.getProperty("dbUser");
             String password = properties.getProperty("dbPassword");
             String dbUrl = properties.getProperty("dbUrl");
-//            String dbName = properties.getProperty("dbName");
-
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
             if (connection == null) {
                 log.info("Connection to database...");
-                //connection = DriverManager.getConnection(dbUrl + ";user=" + user + ";password=" + password + ";databaseName=" + dbName);
                 connection = DriverManager.getConnection(dbUrl, user, password);
                 log.info("Connection successful!");
             }
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return  connection;
+        return connection;
     }
 
-    public void close() {
+    public static void close() {
         if (connection != null) {
             try {
                 log.info("Closing database connection");

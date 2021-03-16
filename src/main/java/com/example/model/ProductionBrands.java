@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class ProductionBrands implements Serializable {
+    private int brand_id;
     private String brandName;
 
 //CREATE TABLE production.brands (

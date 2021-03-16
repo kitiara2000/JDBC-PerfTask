@@ -1,8 +1,19 @@
 package com.example.model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class SalesOrders implements Serializable {
+    int orderId;
+    int customerId;
+    OrderStatus orderStatus;
+    Date orderDate;
+    Date requiredDate;
+    Date shippedDate;
+    int storeId;
+    int staffId;
+
+
     //CREATE TABLE sales.orders (
     //	order_id INT IDENTITY (1, 1) PRIMARY KEY,
     //	customer_id INT,

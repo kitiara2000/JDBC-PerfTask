@@ -1,66 +1,108 @@
 package com.example.demo;
 
+import com.example.dao.BrandsDao;
+import com.example.dao.CustomersDAO;
 import com.example.model.ProductionBrands;
 import com.example.model.SalesCustomers;
 import com.example.statements.Insert;
 import com.example.statements.Select;
 import com.example.util.DatabaseConnection;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 
+@Slf4j
 public class TestCRUDoperations {
+    private static DatabaseConnection connection = null;
+    private static BrandsDao brands = null;
+    private static CustomersDAO customers = null;
+
     ResultSet result;
     ResultSetMetaData metadata;
 
-    static DatabaseConnection dbConnection = null;
-
     @BeforeAll
-    static void setup() throws SQLException {
-        dbConnection = new DatabaseConnection();
-        dbConnection.getConnection();
+    static void setup() {
+        DatabaseConnection.getConnection();
+        brands = new BrandsDao();
+        customers = new CustomersDAO();
     }
 
     @AfterAll
     static public void tearDown() {
-        dbConnection.close();
+        DatabaseConnection.close();
     }
 
     @Test
-    public void testSelectAll() throws SQLException {
-        result = Select.all("production.brands");
-        while (result.next()) { //read data from each row
-            System.out.println(result.getString(1) + ". " + result.getString(2));
-        }
+    public void testTask1() {
+        result = brands.selectAll();
+        brands.printResult(result);
+// add asserts
+        result = brands.selectById(7);
+        brands.printResult(result);
+
+        result = customers.selectById(118);
+        customers.printResult(result);
+
+        result = customers.selectAll();
+        customers.printResult(result);
     }
 
     @Test
-    public void testSelectTop() throws SQLException {
-        result = Select.topNRows("sales.customers", 10);
-        while (result.next()) { //read data from each row
-            System.out.println(result.getString(1) + ". " + result.getString(2) + " " + result.getString(3));
-        }
-    }
+    public void testTask2() {
+        ProductionBrands newBrand = new ProductionBrands();
+        newBrand.setBrandName("Shimano");
 
-    @Test
-    public void testSelectWhere() throws SQLException {
-        result = Select.where("sales.customers", "customer_id <= 10");
-        while (result.next()) { //read data from each row
-            System.out.println(result.getString(1) + ". " + result.getString(2) + " " + result.getString(3));
-        }
-    }
+        SalesCustomers newCustomer = new SalesCustomers();
+        newCustomer.setFirstName("Joe");
+        newCustomer.setLastName("Black");
+        newCustomer.setPhone("null");
+        newCustomer.setEmail("olga@foo.com");
+        newCustomer.setStreet("25 Avenue");
+        newCustomer.setCity("New York");
+        newCustomer.setState("NY");
+        newCustomer.setZipCode("22222");
 
-    @Test
-    public void testSelect() throws SQLException {
-        result = Select.select("SELECT * FROM sales.customers WHERE state = 'CA'");
-        while (result.next()) { //read data from each row
-            System.out.println(result.getString(1) + ". " + result.getString(2) + " " + result.getString(3));
-        }
+        brands.insert(newBrand);
+
+        customers.insert(newCustomer);
+
     }
+//=======================
+
+//    @Test
+//    public void testSelectAll() throws SQLException {
+//        result = Select.all("production.brands");
+//        while (result.next()) { //read data from each row
+//            System.out.println(result.getString(1) + ". " + result.getString(2));
+//        }
+//    }
+
+//    @Test
+//    public void testSelectTop() throws SQLException {
+//        result = Select.topNRows("sales.customers", 10);
+//        while (result.next()) { //read data from each row
+//            System.out.println(result.getString(1) + ". " + result.getString(2) + " " + result.getString(3));
+//        }
+//    }
+//
+//    @Test
+//    public void testSelectWhere() throws SQLException {
+//        result = Select.where("sales.customers", "customer_id <= 10");
+//        while (result.next()) { //read data from each row
+//            System.out.println(result.getString(1) + ". " + result.getString(2) + " " + result.getString(3));
+//        }
+//    }
+//
+//    @Test
+//    public void testSelect() throws SQLException {
+//        result = Select.select("SELECT * FROM sales.customers WHERE state = 'CA'");
+//        while (result.next()) { //read data from each row
+//            System.out.println(result.getString(1) + ". " + result.getString(2) + " " + result.getString(3));
+//        }
+//    }
 
     @Test
     public void testInsertIntoSalesCustomersTable() throws SQLException {
