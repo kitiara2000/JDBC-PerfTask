@@ -54,6 +54,7 @@ public class TestCRUDoperations {
     public void testTask2() {
         ProductionBrands newBrand = new ProductionBrands();
         newBrand.setBrandName("Shimano");
+        brands.insert(newBrand);
 
         SalesCustomers newCustomer = new SalesCustomers();
         newCustomer.setFirstName("Joe");
@@ -64,11 +65,7 @@ public class TestCRUDoperations {
         newCustomer.setCity("New York");
         newCustomer.setState("NY");
         newCustomer.setZipCode("22222");
-
-        brands.insert(newBrand);
-
         customers.insert(newCustomer);
-
     }
 //=======================
 

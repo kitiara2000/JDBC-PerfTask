@@ -6,7 +6,7 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class OrdersDAO implements Table{
+public class OrdersDAO implements Dao<SalesOrders> {
     @Override
     public ResultSet selectAll() throws SQLException {
         return null;
@@ -18,13 +18,23 @@ public class OrdersDAO implements Table{
     }
 
     @Override
-    public void update() throws SQLException {
-
+    public ResultSet select(String sqlRequest) throws SQLException {
+        return null;
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public boolean update(SalesOrders values, int id) throws SQLException {
+        return false;
+    }
 
+    @Override
+    public boolean delete(String sqlQuery) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public boolean deleteById(int id) throws SQLException {
+        return false;
     }
 
     public int insert(SalesOrders values) throws SQLException {

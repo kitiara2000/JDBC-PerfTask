@@ -8,7 +8,7 @@ import java.io.File;
 import java.sql.*;
 
 @Slf4j
-public class BrandsDao implements Table {
+public class BrandsDao implements Dao<ProductionBrands> {
     private Connection connection;
     public Statement statement;
 
@@ -56,13 +56,73 @@ public class BrandsDao implements Table {
     }
 
     @Override
-    public void update() throws SQLException {
-
+    public ResultSet select(String sqlRequest) {
+        ResultSet rs = null;
+        log.info("Execute query: " + sqlRequest);
+        try {
+            rs = statement.executeQuery(sqlRequest);
+            log.info("Query was executed successfully");
+        } catch (SQLException e) {
+            log.error("Query was not executed!", e);
+        }
+        return rs;
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public boolean update(ProductionBrands value, int id) {
+        log.info("Update brand with ID " + id + " at production.brands table");
+        String query = "UPDATE production.brands SET brand_name=? WHERE brand_id = ?";
+        PreparedStatement ps = null;
 
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, value.getBrandName());
+            ps.setInt(2, id);
+            ps.executeUpdate();
+
+            log.info("Brand name is updated");
+            return true;
+        } catch (SQLException e) {
+            log.error("Update was not executed", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(String clause) {
+        log.info("Delete brand from production.brands table where: " + clause);
+        try {
+            if (clause.isEmpty()) {
+                log.info("The clause is not specified, cannot delete");
+                return false;
+            }
+            statement.executeUpdate("DELETE FROM production.brands WHERE " + clause);
+            log.info("Delete was executed successfully");
+            return true;
+
+        } catch (SQLException e) {
+            log.error("Delete was not processed!", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteById(int id) {
+        log.info("Delete brand with ID " + id + " from production.brands table");
+        String query = "DELETE FROM production.brands WHERE brand_id = ?";
+        PreparedStatement ps = null;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+            log.info("Brand is deleted");
+            return true;
+        } catch (SQLException e) {
+            log.error("Delete was not processed", e);
+        }
+        return false;
     }
 
     public int insert(ProductionBrands values) {

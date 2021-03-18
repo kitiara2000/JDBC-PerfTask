@@ -8,7 +8,7 @@ import java.io.File;
 import java.sql.*;
 
 @Slf4j
-public class CustomersDAO implements Table {
+public class CustomersDAO implements Dao<SalesCustomers> {
     private Connection connection;
     public Statement statement;
 
@@ -26,9 +26,9 @@ public class CustomersDAO implements Table {
     @Override
     public ResultSet selectAll() {
         ResultSet rs = null;
-        log.info("Execute query: SELECT * FROM production.brands");
+        log.info("Execute query: SELECT * FROM sales.customers");
         try {
-            rs = statement.executeQuery("SELECT * FROM production.brands");
+            rs = statement.executeQuery("SELECT * FROM sales.customers");
             log.info("Query was executed successfully");
         } catch (SQLException throwables) {
             log.error("Query was not executed!");
@@ -57,13 +57,111 @@ public class CustomersDAO implements Table {
     }
 
     @Override
-    public void update() throws SQLException {
-
+    public ResultSet select(String sqlRequest) {
+        ResultSet rs = null;
+        log.info("Execute query: " + sqlRequest);
+        try {
+            rs = statement.executeQuery(sqlRequest);
+            log.info("Query was executed successfully");
+        } catch (SQLException e) {
+            log.error("Query was not executed!", e);
+        }
+        return rs;
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public boolean update(SalesCustomers newValues, int id) {
+        log.info("Update customer with ID " + id + " at sales.customers  table");
 
+        String query = "UPDATE sales.customers SET " +
+                "first_name=?, last_name=?, phone=?, email=?, street=?, city=?, state=?, zip_code=?" +
+                " WHERE customer_id = ?";
+        PreparedStatement ps = null;
+
+        try {
+            ps = connection.prepareStatement("SELECT * FROM sales.customers WHERE customer_id = ?");
+            ps.setInt(1, id);
+            ResultSet currentValues = ps.executeQuery();
+
+            ps = connection.prepareStatement(query);
+
+            while (currentValues.next()) {
+                if (newValues.getFirstName() == null) newValues.setFirstName(currentValues.getString("first_name"));
+                ps.setString(1, newValues.getFirstName());
+                if (newValues.getLastName() == null) newValues.setLastName(currentValues.getString("last_name"));
+                ps.setString(2, newValues.getLastName());
+                if (newValues.getPhone() == null) newValues.setPhone(currentValues.getString("phone"));
+                ps.setString(3, newValues.getPhone());
+                if (newValues.getEmail() == null) newValues.setEmail(currentValues.getString("email"));
+                ps.setString(4, newValues.getEmail());
+                if (newValues.getStreet() == null) newValues.setStreet(currentValues.getString("street"));
+                ps.setString(5, newValues.getStreet());
+                if (newValues.getCity() == null) newValues.setCity(currentValues.getString("city"));
+                ps.setString(6, newValues.getCity());
+                if (newValues.getState() == null) newValues.setState(currentValues.getString("state"));
+                ps.setString(7, newValues.getState());
+                if (newValues.getZipCode() == null) newValues.setZipCode(currentValues.getString("zip_code"));
+                ps.setString(8, newValues.getZipCode());
+            }
+
+            ps.setInt(9, id);
+            ps.executeUpdate();
+
+            log.info("Customer data is updated");
+            return true;
+        } catch (SQLException e) {
+            log.error("Update was not executed", e);
+        }
+        return false;
+    }
+
+    public boolean update(String sqlRequest) {
+        log.info("Execute update: " + sqlRequest);
+        try {
+            statement.executeUpdate(sqlRequest);
+            log.info("Update was executed successfully");
+            return true;
+        } catch (SQLException e) {
+            log.error("Update was not executed!", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(String clause) {
+        log.info("Delete customer from sales.customers table where: " + clause);
+        try {
+            if (clause.isEmpty()) {
+                log.info("The clause is not specified, cannot delete");
+                return false;
+            }
+            statement.executeUpdate("DELETE FROM sales.customers WHERE " + clause);
+            log.info("Delete was executed successfully");
+            return true;
+
+        } catch (SQLException e) {
+            log.error("Delete was not processed!", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteById(int id) {
+        log.info("Delete customer with ID " + id + " from sales.customers table");
+        String query = "DELETE FROM sales.customers WHERE customer_id = ?";
+        PreparedStatement ps = null;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+            log.info("Customer is deleted");
+            return true;
+        } catch (SQLException e) {
+            log.error("Delete was not processed", e);
+        }
+        return false;
     }
 
     public int insert(SalesCustomers values) {
@@ -99,15 +197,16 @@ public class CustomersDAO implements Table {
         try {
             while (result.next()) { //read data from each row
                 System.out.println(result.getString("customer_id") + ". " +
-                                result.getString("first_name") + " " +
-                                result.getString("last_name") + " " +
-                                result.getString("phone") + " " +
-                                result.getString("email") + " " +
-                                result.getString("street") + " " +
-                                result.getString("city") + " " +
-                                result.getString("state") + " " +
-                                result.getString("zip_code") );
+                        result.getString("first_name") + " " +
+                        result.getString("last_name") + " " +
+                        result.getString("phone") + " " +
+                        result.getString("email") + " " +
+                        result.getString("street") + " " +
+                        result.getString("city") + " " +
+                        result.getString("state") + " " +
+                        result.getString("zip_code"));
             }
+            log.info("Result is printed");
         } catch (SQLException e) {
             log.error("Result cannot be printed", e);
         }
