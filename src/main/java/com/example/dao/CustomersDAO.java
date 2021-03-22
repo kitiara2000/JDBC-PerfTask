@@ -180,17 +180,29 @@ public class CustomersDAO implements Dao<SalesCustomers> {
                     values.getState() + "', '" +
                     values.getZipCode() + "')");
             log.info("New customer added");
-        } catch (SQLException throwables) {
-            log.error("Customer was not added!");
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            log.error("Customer was not added!", e);
         }
         return rs;
     }
 
     @Override
-    public int bulkInsert(File csv) throws SQLException {
-        return 0;
+    public int bulkInsert(File csv) {
+        int rs = 0;
+        String filePath =  csv.getPath();
+        log.info("Add new customers from .csv file to sales.customers table");
+        try {
+            rs = statement.executeUpdate("BULK INSERT sales.customers " +
+                    "FROM '" + filePath +
+                    "' WITH" +
+                    "(FIELDTERMINATOR = ',', ROWTERMINATOR = '\n')");
+            log.info("New customers from .csv file were added with success");
+        } catch (SQLException e) {
+            log.error("Customers were not added!", e);
+        }
+        return rs;
     }
+
 
     @Override
     public void printResult(ResultSet result) {
