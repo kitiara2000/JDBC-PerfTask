@@ -42,8 +42,8 @@ public class OrdersDAO implements Dao<SalesOrders> {
     }
 
     @Override
-    public int bulkInsert(File csv) throws SQLException {
-        return 0;
+    public boolean bulkInsert(File csv) throws SQLException {
+        return false;
     }
 
     @Override

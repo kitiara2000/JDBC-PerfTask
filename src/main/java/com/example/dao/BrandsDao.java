@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.sql.*;
 
+import static com.example.util.Input.fileToArray;
+
 @Slf4j
 public class BrandsDao implements Dao<ProductionBrands> {
     private Connection connection;
@@ -139,8 +141,22 @@ public class BrandsDao implements Dao<ProductionBrands> {
     }
 
     @Override
-    public int bulkInsert(File csv) throws SQLException {
-        return 0;
+    public boolean bulkInsert(File csv) throws SQLException {
+        String[] values = fileToArray(csv.getPath());
+        log.info("Add new brands from .csv file to production.brands table");
+        try {
+            for (int i = 0; i < values.length; i++) {
+                statement.executeUpdate("INSERT INTO production.brands " +
+                        "(brand_name)" +
+                        " VALUES (" + values[i] + ")");
+            }
+
+            log.info("New brands from .csv file were added with success");
+            return true;
+        } catch (SQLException e) {
+            log.error("brands were not added!", e);
+        }
+        return false;
     }
 
     @Override

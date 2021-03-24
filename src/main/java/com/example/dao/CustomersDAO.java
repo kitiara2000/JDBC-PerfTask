@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.sql.*;
 
+import static com.example.util.Input.fileToArray;
+
 @Slf4j
 public class CustomersDAO implements Dao<SalesCustomers> {
     private Connection connection;
@@ -187,22 +189,27 @@ public class CustomersDAO implements Dao<SalesCustomers> {
     }
 
     @Override
-    public int bulkInsert(File csv) {
-        int rs = 0;
-        String filePath =  csv.getPath();
+    public boolean bulkInsert(File csv) {
+        String[] values = fileToArray(csv.getPath());
         log.info("Add new customers from .csv file to sales.customers table");
         try {
-            rs = statement.executeUpdate("BULK INSERT sales.customers " +
-                    "FROM '" + filePath +
-                    "' WITH" +
-                    "(FIELDTERMINATOR = ',', ROWTERMINATOR = '\n')");
+            for (int i = 0; i < values.length; i++) {
+                statement.executeUpdate("INSERT INTO sales.customers " +
+                        "(first_name, last_name, phone, email, street, city, state, zip_code)" +
+                        " VALUES (" + values[i] + ")");
+            }
+//            rs = statement.executeUpdate("BULK INSERT sales.customers " +
+//                    "FROM '" + filePath +
+//                    "' WITH" +
+//                    "(FIELDTERMINATOR = ',', ROWTERMINATOR = '\n')");
             log.info("New customers from .csv file were added with success");
+            return true;
+
         } catch (SQLException e) {
             log.error("Customers were not added!", e);
         }
-        return rs;
+        return false;
     }
-
 
     @Override
     public void printResult(ResultSet result) {

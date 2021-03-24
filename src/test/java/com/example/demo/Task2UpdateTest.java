@@ -5,9 +5,8 @@ import com.example.dao.CustomersDAO;
 import com.example.model.ProductionBrands;
 import com.example.model.SalesCustomers;
 import com.example.util.DatabaseConnection;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Task2UpdateTest {
     private static BrandsDao brands = null;

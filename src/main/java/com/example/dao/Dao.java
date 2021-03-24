@@ -17,7 +17,7 @@ public interface Dao<T> {
 
     public int insert (T values) throws SQLException;
 
-    public int bulkInsert(File csv) throws SQLException;
+    public boolean bulkInsert(File csv) throws SQLException;
 
     public void printResult(ResultSet result);
 

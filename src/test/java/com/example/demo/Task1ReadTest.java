@@ -3,11 +3,12 @@ package com.example.demo;
 import com.example.dao.BrandsDao;
 import com.example.dao.CustomersDAO;
 import com.example.util.DatabaseConnection;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Task1ReadTest {
     private static BrandsDao brands = null;
@@ -29,9 +30,10 @@ public class Task1ReadTest {
 
 
     @Test
-    public void testSelectAllBrandsTable() {
+    public void testSelectAllBrandsTable() throws SQLException {
         result = brands.selectAll();
         brands.printResult(result);
+        assertThat("Result is not empty", !result.wasNull());
         // add asserts
     }
 
