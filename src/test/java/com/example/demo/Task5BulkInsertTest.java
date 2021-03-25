@@ -17,7 +17,7 @@ public class Task5BulkInsertTest {
 
     @BeforeAll
     static void setup() {
-        DatabaseConnection.getConnection();
+        DatabaseConnection.getInstance().getConnection();
         brands = new BrandsDao();
         customers = new CustomersDAO();
     }

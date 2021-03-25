@@ -18,7 +18,7 @@ public class Task2UpdateTest {
 
     @BeforeAll
     static void setup() {
-        DatabaseConnection.getConnection();
+        DatabaseConnection.getInstance().getConnection();
         brands = new BrandsDao();
         customers = new CustomersDAO();
     }

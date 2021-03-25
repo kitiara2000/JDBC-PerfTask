@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class Task1ReadTest {
     private static BrandsDao brands = null;
@@ -22,7 +23,7 @@ public class Task1ReadTest {
 
     @BeforeAll
     static void setup() {
-        DatabaseConnection.getConnection();
+        DatabaseConnection.getInstance().getConnection();
         brands = new BrandsDao();
         customers = new CustomersDAO();
     }
@@ -36,13 +37,14 @@ public class Task1ReadTest {
     @Test
     public void testSelectAllBrandsTable() throws SQLException {
         result = brands.selectAll();
-        assertThat("Result is not empty", !result.wasNull());
+        assertThat("Result is not empty", result, notNullValue());
+        brands.printResult(result);
     }
 
     @Test
     public void testSelectAllCustomersTable() throws SQLException {
         result = customers.selectAll();
-        assertThat("Result is not empty", !result.wasNull());
+        assertThat("Result is not empty", result, notNullValue());
     }
 
     @Test

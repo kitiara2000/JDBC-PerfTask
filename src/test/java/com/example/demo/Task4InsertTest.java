@@ -18,7 +18,7 @@ public class Task4InsertTest {
 
     @BeforeAll
     static void setup() {
-        DatabaseConnection.getConnection();
+        DatabaseConnection.getInstance().getConnection();
         brands = new BrandsDao();
         customers = new CustomersDAO();
     }
