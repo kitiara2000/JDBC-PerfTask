@@ -48,7 +48,7 @@ public class Task1ReadTest {
 
     @Test
     public void testSelectByIdBrandsTable() throws SQLException {
-        int id = 7;
+        int id = 1;
         int resultId = 0;
         result = brands.selectById(id);
 
