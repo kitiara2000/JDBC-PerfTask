@@ -198,10 +198,6 @@ public class CustomersDAO implements Dao<SalesCustomers> {
                         "(first_name, last_name, phone, email, street, city, state, zip_code)" +
                         " VALUES (" + values[i] + ")");
             }
-//            rs = statement.executeUpdate("BULK INSERT sales.customers " +
-//                    "FROM '" + filePath +
-//                    "' WITH" +
-//                    "(FIELDTERMINATOR = ',', ROWTERMINATOR = '\n')");
             log.info("New customers from .csv file were added with success");
             return true;
 
