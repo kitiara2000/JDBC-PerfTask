@@ -17,7 +17,7 @@ public class BrandsDao implements Dao<ProductionBrands> {
     {
         try {
             //get connection to DB
-            connection = new DatabaseConnection().getConnection();
+            connection = DatabaseConnection.getInstance().getConnection();
             //create a statement
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         } catch (SQLException e) {
