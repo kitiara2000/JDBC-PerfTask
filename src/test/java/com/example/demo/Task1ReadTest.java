@@ -3,12 +3,16 @@ package com.example.demo;
 import com.example.dao.BrandsDao;
 import com.example.dao.CustomersDAO;
 import com.example.util.DatabaseConnection;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class Task1ReadTest {
     private static BrandsDao brands = null;
@@ -32,43 +36,77 @@ public class Task1ReadTest {
     @Test
     public void testSelectAllBrandsTable() throws SQLException {
         result = brands.selectAll();
-        brands.printResult(result);
+//        brands.printResult(result);
         assertThat("Result is not empty", !result.wasNull());
-        // add asserts
     }
 
     @Test
-    public void testSelectAllCustomersTable() {
+    public void testSelectAllCustomersTable() throws SQLException {
         result = customers.selectAll();
-        customers.printResult(result);
-        // add asserts
+//        customers.printResult(result);
+        assertThat("Result is not empty", !result.wasNull());
     }
 
     @Test
-    public void testSelectByIdBrandsTable() {
-        result = brands.selectById(7);
-        brands.printResult(result);
-        //add asserts
+    public void testSelectByIdBrandsTable() throws SQLException {
+        int id = 7;
+        int resultId = 0;
+        result = brands.selectById(id);
+
+        if (result.next()) {
+            resultId = result.getInt("brand_id");
+        }
+
+        assertThat(format("ID value is [%s]", id),
+                resultId,
+                is(id));
     }
 
     @Test
-    public void testSelectByIdCustomersTable() {
+    public void testSelectByIdCustomersTable() throws SQLException {
+        int id = 118;
+        int resultId = 0;
+
         result = customers.selectById(118);
-        customers.printResult(result);
-        // add asserts
+
+        if (result.next()) {
+            resultId = result.getInt("customer_id");
+        }
+
+        assertThat(format("ID value is [%s]", id),
+                resultId,
+                is(id));
     }
 
     @Test
-    public void testSelectBrandsTable() {
-        result = brands.select("SELECT * FROM production.brands WHERE brand_name = 'Shimano' ");
-        brands.printResult(result);
-        //add asserts
+    public void testSelectBrandsTable() throws SQLException {
+        String brandName = "Strider";
+        String resultBrandName = "";
+
+        result = brands.select("SELECT * FROM production.brands WHERE brand_name = '" + brandName + "'");
+
+        if (result.next()) {
+            resultBrandName = result.getString("brand_name");
+        }
+
+        assertThat(format("Brand name value is [%s]", brandName),
+                resultBrandName,
+                is(brandName));
     }
 
     @Test
-    public void testSelectCustomersTable() {
-        result = customers.select("SELECT * FROM sales.customers WHERE last_name = 'Black' ");
-        customers.printResult(result);
-        // add asserts
+    public void testSelectCustomersTable() throws SQLException {
+        String lastName = "Black";
+        String resultLastName = "";
+
+        result = customers.select("SELECT * FROM sales.customers WHERE last_name = '" + lastName + "'");
+
+        if (result.next()) {
+            resultLastName = result.getString("last_name");
+        }
+
+        assertThat(format("Brand name value is [%s]", lastName),
+                resultLastName,
+                is(lastName));
     }
 }

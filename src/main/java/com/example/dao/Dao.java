@@ -19,8 +19,6 @@ public interface Dao<T> {
 
     public boolean bulkInsert(File csv) throws SQLException;
 
-    public void printResult(ResultSet result);
-
 //    public interface Dao<T> {
 //        Optional<T> get(long id);
 //        List<T> getAll();

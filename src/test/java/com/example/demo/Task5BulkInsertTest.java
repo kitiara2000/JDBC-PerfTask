@@ -4,7 +4,9 @@ import com.example.dao.BrandsDao;
 import com.example.dao.CustomersDAO;
 import com.example.util.DatabaseConnection;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -27,9 +29,21 @@ public class Task5BulkInsertTest {
 
     @Test
     public void testInsertCustomersFromCSV() throws SQLException {
-        File file = new File( "C:\\customers2.csv");
-        customers.bulkInsert(file);
-        customers.printResult(customers.select("SELECT * FROM sales.customers"));
+        boolean isUpdated = false;
 
+        File file = new File( "src/main/resources/customers.csv");
+        isUpdated = customers.bulkInsert(file);
+
+        assertThat("Customers are added from .csv file", isUpdated, is(true));
+    }
+
+    @Test
+    public void testInsertBrandsFromCSV() throws SQLException {
+        boolean isUpdated = false;
+
+        File file = new File( "src/main/resources/brands.csv");
+        isUpdated = brands.bulkInsert(file);
+
+        assertThat("Brands are added from .csv file", isUpdated, is(true));
     }
 }

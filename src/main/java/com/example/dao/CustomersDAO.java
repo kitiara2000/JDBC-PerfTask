@@ -210,8 +210,6 @@ public class CustomersDAO implements Dao<SalesCustomers> {
         }
         return false;
     }
-
-    @Override
     public void printResult(ResultSet result) {
         try {
             while (result.next()) { //read data from each row
