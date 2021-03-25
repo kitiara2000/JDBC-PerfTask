@@ -38,7 +38,6 @@ public class Task1ReadTest {
     public void testSelectAllBrandsTable() throws SQLException {
         result = brands.selectAll();
         assertThat("Result is not empty", result, notNullValue());
-        brands.printResult(result);
     }
 
     @Test
