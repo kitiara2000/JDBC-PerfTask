@@ -5,10 +5,14 @@ import com.example.dao.CustomersDAO;
 import com.example.model.ProductionBrands;
 import com.example.model.SalesCustomers;
 import com.example.util.DatabaseConnection;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class Task4InsertTest {
     private static BrandsDao brands = null;
@@ -30,17 +34,20 @@ public class Task4InsertTest {
 
     @Test
     public void testInsertIntoBrandsTable() {
+        int rowsUpdated = 0;
+
         ProductionBrands newBrand = new ProductionBrands();
         newBrand.setBrandName("Shimano");
-        brands.insert(newBrand);
 
-        result = brands.select("SELECT * FROM production.brands WHERE brand_name = 'Shimano' ");
-        brands.printResult(result);
-        // add assertions
+        rowsUpdated = brands.insert(newBrand);
+
+        assertThat("Brand is added", rowsUpdated > 0, is(true));
     }
 
     @Test
     public void testInsertIntoCustomersTable() {
+        int rowsUpdated = 0;
+
         SalesCustomers newCustomer = new SalesCustomers();
         newCustomer.setFirstName("Joe");
         newCustomer.setLastName("Black");
@@ -50,10 +57,9 @@ public class Task4InsertTest {
         newCustomer.setCity("New York");
         newCustomer.setState("NY");
         newCustomer.setZipCode("22222");
-        customers.insert(newCustomer);
 
-        result = customers.select("SELECT * FROM sales.customers WHERE last_name = 'Black' ");
-        customers.printResult(result);
-        //add assertions
+        rowsUpdated = customers.insert(newCustomer);
+
+        assertThat("Customer is added", rowsUpdated > 0, is(true));
     }
 }

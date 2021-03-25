@@ -46,7 +46,6 @@ public class OrdersDAO implements Dao<SalesOrders> {
         return false;
     }
 
-    @Override
     public void printResult(ResultSet result) {
 
     }

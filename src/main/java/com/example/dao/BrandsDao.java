@@ -20,8 +20,8 @@ public class BrandsDao implements Dao<ProductionBrands> {
             connection = new DatabaseConnection().getConnection();
             //create a statement
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -144,13 +144,13 @@ public class BrandsDao implements Dao<ProductionBrands> {
     public boolean bulkInsert(File csv) throws SQLException {
         String[] values = fileToArray(csv.getPath());
         log.info("Add new brands from .csv file to production.brands table");
+
         try {
             for (int i = 0; i < values.length; i++) {
                 statement.executeUpdate("INSERT INTO production.brands " +
                         "(brand_name)" +
-                        " VALUES (" + values[i] + ")");
+                        " VALUES ('" + values[i] + "')");
             }
-
             log.info("New brands from .csv file were added with success");
             return true;
         } catch (SQLException e) {
@@ -159,7 +159,6 @@ public class BrandsDao implements Dao<ProductionBrands> {
         return false;
     }
 
-    @Override
     public void printResult(ResultSet result) {
         try {
             while (result.next()) { //read data from each row
